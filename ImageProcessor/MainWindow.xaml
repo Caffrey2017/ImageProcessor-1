@@ -1,0 +1,61 @@
+﻿<Window x:Class="ImageProcessor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageProcessor"
+        mc:Ignorable="d"
+        Title="ImageProcessor" Height="450" Width="800">
+    <Grid Background="#656565">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Menu DockPanel.Dock="Top" Background="#424242" Foreground="White">
+                <MenuItem Header="_File" Height="20" BorderThickness="0">
+                    <MenuItem Header="_Open" Background="#424242" Foreground="White" BorderThickness="0" Click="LoadFileClick"/>
+                    <MenuItem Header="_Save" Background="#424242" Foreground="White" BorderThickness="0"/>
+                    <MenuItem Header="_Close" Background="#424242" Foreground="White" BorderThickness="0"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content="File not loaded" Name="ImageLabel" Foreground="#3b3b3b"/>
+            <Image Name="CachedImage" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="1" Background="#5c5c5c" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
+                <Label Content="Sigma" Foreground="White" Width="70"/>
+                <TextBox Text="{Binding ElementName=SigmaSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
+                <Slider Name="SigmaSlider" TickFrequency="0.1" IsSnapToTickEnabled="True" Width="230" Minimum="0.2" Maximum="10" Margin="5"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal">
+                <Label Content="Kernel size" Foreground="White" Width="70"/>
+                <TextBox Text="{Binding ElementName=KernelSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
+                <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Width="230" Minimum="3" Maximum="21" Margin="5"/>
+            </StackPanel>
+        </Grid>
+
+        
+        <!--<Slider HorizontalAlignment="Left" Margin="510,119,0,0" VerticalAlignment="Top" Width="267"/>
+        <Label Content="Gaussian blur" HorizontalAlignment="Left" Margin="406,36,0,0" VerticalAlignment="Top" Height="26" Foreground="White"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="488,137,0,0" VerticalAlignment="Top"/>
+
+        <ProgressBar HorizontalAlignment="Left" Height="16" Margin="406,383,0,0" VerticalAlignment="Top" Width="370"/>-->
+    </Grid>
+</Window>
