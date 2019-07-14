@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using ImageProcessor.ImageUtil;
+using ImageProcessor.GaussianBlur;
 
 namespace ImageProcessor
 {
@@ -25,6 +26,8 @@ namespace ImageProcessor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Bitmap img;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,11 +42,20 @@ namespace ImageProcessor
                 ImageLabel.Height = 0;
                 saveMenuBtn.IsEnabled = true;
 
-                Bitmap img = new Bitmap(dialog.FileName);
+                img = new Bitmap(dialog.FileName);
 
                 // Setting display image
                 CachedImage.Source = new IPImage(img).BitmapToImageSource();
             }
+        }
+
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            GaussianBlurEffect gauss = new GaussianBlurEffect(img);
+            gauss.CalculateKernel(3, 5.5f);
+            gauss.ApplyEffect();
+
+            CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
     }
 }

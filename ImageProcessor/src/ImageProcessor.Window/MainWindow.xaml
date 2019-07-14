@@ -36,6 +36,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+				<RowDefinition Height="30" />
             </Grid.RowDefinitions>
             
             <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
@@ -49,7 +50,9 @@
                 <TextBox Text="{Binding ElementName=KernelSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
                 <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Width="230" Minimum="3" Maximum="21" Margin="5"/>
             </StackPanel>
-        </Grid>
+
+			<Button Grid.Row="2" Content="Apply" Name="ApplyButton" Margin="2"  Click="ApplyButton_Click"/>
+		</Grid>
 
         
         <!--<Slider HorizontalAlignment="Left" Margin="510,119,0,0" VerticalAlignment="Top" Width="267"/>
