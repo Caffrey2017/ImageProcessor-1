@@ -16,6 +16,8 @@ using System.Windows.Interop;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using ImageProcessor.ImageUtil;
+
 namespace ImageProcessor
 {
     /// <summary>
@@ -28,8 +30,6 @@ namespace ImageProcessor
             InitializeComponent();
         }
 
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hObject);
         private void LoadFileClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -37,26 +37,12 @@ namespace ImageProcessor
             {
                 Console.WriteLine("File loaded.");
                 ImageLabel.Height = 0;
+                saveMenuBtn.IsEnabled = true;
 
                 Bitmap img = new Bitmap(dialog.FileName);
 
-                // Converting bitmap to BitmapSource object
-                BitmapSource imgSource;
-                var hBitmap = img.GetHbitmap();
-                imgSource = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                DeleteObject(hBitmap);
-
-                //BitmapImage bitmapImg = new BitmapImage(new Uri(dialog.FileName, UriKind.Absolute));
-                //BitmapSource src = new FormatConvertedBitmap(bitmapImg, PixelFormats.Rgb24, null, 0);
-                //WriteableBitmap writeableBitmap = new WriteableBitmap(src);
-
-                //int[] pixelData = new int[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight];
-                //writeableBitmap.CopyPixels(pixelData, 3 * writeableBitmap.PixelWidth, 0);
-                //Console.WriteLine(pixelData[0].ToString() + " " + pixelData[1].ToString() + " " + pixelData[2].ToString() + " " + pixelData[3].ToString());
-
                 // Setting display image
-                // CachedImage.Source = writeableBitmap;
-                CachedImage.Source = imgSource;
+                CachedImage.Source = new IPImage(img).BitmapToImageSource();
             }
         }
     }

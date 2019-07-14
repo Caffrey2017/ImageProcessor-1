@@ -21,7 +21,7 @@
             <Menu DockPanel.Dock="Top" Background="#424242" Foreground="White">
                 <MenuItem Header="_File" Height="20" BorderThickness="0">
                     <MenuItem Header="_Open" Background="#424242" Foreground="White" BorderThickness="0" Click="LoadFileClick"/>
-                    <MenuItem Header="_Save" Background="#424242" Foreground="White" BorderThickness="0"/>
+                    <MenuItem Header="_Save" Name="saveMenuBtn" Background="#424242" Foreground="White" BorderThickness="0" IsEnabled="False"/>
                     <MenuItem Header="_Close" Background="#424242" Foreground="White" BorderThickness="0"/>
                 </MenuItem>
             </Menu>
