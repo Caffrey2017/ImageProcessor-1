@@ -38,10 +38,12 @@ namespace ImageProcessor
             OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == true)
             {
-                Console.WriteLine("File loaded.");
+                // Update interface
                 ImageLabel.Height = 0;
                 saveMenuBtn.IsEnabled = true;
+                ApplyButton.IsEnabled = true;
 
+                // Load image to bitmap
                 img = new Bitmap(dialog.FileName);
 
                 // Setting display image
@@ -52,9 +54,13 @@ namespace ImageProcessor
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             GaussianBlurEffect gauss = new GaussianBlurEffect(img);
-            gauss.CalculateKernel(3, 5.5f);
+            float sigma = (float)SigmaSlider.Value;
+            uint kernel = (uint)KernelSlider.Value;
+
+            gauss.CalculateKernel(kernel, sigma);
             gauss.ApplyEffect();
 
+            // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
     }

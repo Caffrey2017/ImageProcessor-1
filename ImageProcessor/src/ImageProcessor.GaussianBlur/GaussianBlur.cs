@@ -28,12 +28,12 @@ namespace ImageProcessor.GaussianBlur
 
             this.kernelSize = 3;
             this.sigma = 5.5f;
-            this.kernel = new double[kernelSize, kernelSize];
         }
 
         public void CalculateKernel(uint kernelSize, float sigma)
         {
             this.kernelSize = kernelSize;
+            this.kernel = new double[kernelSize, kernelSize];
             this.sigma = sigma;
 
             uint x = 0 - ((kernelSize - 1) / 2);

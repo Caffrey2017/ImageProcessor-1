@@ -51,7 +51,7 @@
                 <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Width="230" Minimum="3" Maximum="21" Margin="5"/>
             </StackPanel>
 
-			<Button Grid.Row="2" Content="Apply" Name="ApplyButton" Margin="2"  Click="ApplyButton_Click"/>
+			<Button Grid.Row="2" Content="Apply" Name="ApplyButton" Margin="2" IsEnabled="False"  Click="ApplyButton_Click"/>
 		</Grid>
 
         
