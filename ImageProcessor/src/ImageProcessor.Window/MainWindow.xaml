@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageProcessor"
         mc:Ignorable="d"
-        Title="ImageProcessor" Height="450" Width="800">
+        Title="ImageProcessor" Height="800" Width="1400">
     <Grid Background="#656565">
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -13,16 +13,16 @@
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Menu DockPanel.Dock="Top" Background="#424242" Foreground="White">
+            <Menu DockPanel.Dock="Top" Background="#424242" Foreground="White" >
                 <MenuItem Header="_File" Height="20" BorderThickness="0">
                     <MenuItem Header="_Open" Background="#424242" Foreground="White" BorderThickness="0" Click="LoadFileClick"/>
                     <MenuItem Header="_Save" Name="saveMenuBtn" Background="#424242" Foreground="White" BorderThickness="0" IsEnabled="False"/>
-                    <MenuItem Header="_Close" Background="#424242" Foreground="White" BorderThickness="0"/>
+                    <MenuItem Header="_Close" Background="#424242" Foreground="White" BorderThickness="0" Click="MenuItem_Click"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -34,24 +34,26 @@
 
         <Grid Grid.Row="1" Grid.Column="1" Background="#5c5c5c" Margin="6">
             <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
 				<RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            
-            <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
+
+            <Label Grid.Row="0" Content="GAUSSIAN BLUR" Foreground="White" FontSize="15" HorizontalAlignment="Right" Margin="5" FontWeight="Heavy"/>
+            <Separator Grid.Row="0" VerticalAlignment="Bottom"/>
+            <DockPanel Grid.Row="1" Margin="10">
                 <Label Content="Sigma" Foreground="White" Width="70"/>
                 <TextBox Text="{Binding ElementName=SigmaSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
-                <Slider Name="SigmaSlider" TickFrequency="0.1" IsSnapToTickEnabled="True" Width="230" Minimum="0.2" Maximum="10" Margin="5"/>
-            </StackPanel>
-            
-            <StackPanel Grid.Row="1" Margin="10" Orientation="Horizontal">
+                <Slider Name="SigmaSlider" TickFrequency="0.1" IsSnapToTickEnabled="True" Minimum="0.2" Maximum="10" Margin="5"/>
+            </DockPanel>
+
+            <DockPanel Grid.Row="2" Margin="10">
                 <Label Content="Kernel size" Foreground="White" Width="70"/>
                 <TextBox Text="{Binding ElementName=KernelSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
-                <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Width="230" Minimum="3" Maximum="21" Margin="5"/>
-            </StackPanel>
-
-			<Button Grid.Row="2" Content="Apply" Name="ApplyButton" Margin="2" IsEnabled="False"  Click="ApplyButton_Click"/>
+                <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Minimum="3" Maximum="21" Margin="5"/>
+            </DockPanel>
+            <Button Grid.Row="3" Content="Apply" Name="ApplyButton" Margin="2" IsEnabled="False"  Click="ApplyButton_Click"/>
 		</Grid>
 
         

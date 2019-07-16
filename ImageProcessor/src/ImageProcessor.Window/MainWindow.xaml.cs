@@ -63,5 +63,10 @@ namespace ImageProcessor
             // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
