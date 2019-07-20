@@ -64,9 +64,28 @@ namespace ImageProcessor
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
 
+        private void SaveMenuBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = "jpg";
+            dialog.Filter = "JPG image (*.jpg)|*.jpg|PNG image(*.png)|*.png|All files (*.*)|*.*";
+            dialog.Title = "Save as";
+
+            if (dialog.ShowDialog() == true)
+            {
+                string path = dialog.FileName;
+                img.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void BrigtnessButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
