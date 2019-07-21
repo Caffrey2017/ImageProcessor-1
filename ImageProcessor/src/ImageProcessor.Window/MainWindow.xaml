@@ -63,7 +63,7 @@
             <Separator Grid.Row="4" VerticalAlignment="Bottom"/>
             <DockPanel Grid.Row="5" Margin="10">
                 <TextBox Text="{Binding ElementName=BrigtnessSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
-                <Slider Name="BrigtnessSlider" TickFrequency="1" IsSnapToTickEnabled="True" Minimum="-100" Maximum="100" Margin="5" />
+                <Slider Name="BrigtnessSlider" TickFrequency="1" IsSnapToTickEnabled="True" Minimum="-255" Maximum="255" Margin="5" />
             </DockPanel>
 
             <Button Grid.Row="6" Content="Apply" Name="BrigtnessButton" Margin="6" IsEnabled="False"  Click="BrigtnessButton_Click"/>
