@@ -100,12 +100,11 @@ namespace ImageProcessor.GaussianBlur
             for (int i = 3 * ((int)kernelSize - 1) * imgWidth; i < rgbValues.Length - 3*(kernelSize - 1) * imgWidth; i += 3)
             {
                 if (((i/3)%imgWidth < ((int)kernelSize - 1)) || ((i/3)%imgWidth >= imgWidth - ((int)kernelSize - 1)) )
-                {
                     continue;
-                }
+
                 else
                 {
-                    rgbValues[i] = CalculatePixelLockBits(i, 0, rgbValuesOld);
+                    rgbValues[i]   = CalculatePixelLockBits(i, 0, rgbValuesOld);
                     rgbValues[i+1] = CalculatePixelLockBits(i, 1, rgbValuesOld);
                     rgbValues[i+2] = CalculatePixelLockBits(i, 2, rgbValuesOld);
                 }
