@@ -19,7 +19,7 @@ namespace ImageProcessor.GaussianBlur
         public uint kernelSize { get; private set; }
         public float sigma { get; private set; }
 
-        public GaussianBlurEffect(Bitmap bitmap)
+        public GaussianBlurEffect(ref Bitmap bitmap)
         {
             this.bitmap = bitmap;
             bitmapOld = new Bitmap(bitmap);

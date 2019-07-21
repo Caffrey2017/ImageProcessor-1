@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 
 using ImageProcessor.ImageUtil;
 using ImageProcessor.GaussianBlur;
+using ImageProcessor.Brightness;
 
 namespace ImageProcessor
 {
@@ -27,6 +28,8 @@ namespace ImageProcessor
     public partial class MainWindow : Window
     {
         private Bitmap img;
+        private GaussianBlurEffect gauss;
+        private BrightnessEffect brightness;
 
         public MainWindow()
         {
@@ -41,27 +44,20 @@ namespace ImageProcessor
                 // Update interface
                 ImageLabel.Height = 0;
                 saveMenuBtn.IsEnabled = true;
-                ApplyButton.IsEnabled = true;
+                GaussianButton.IsEnabled = true;
+                BrigtnessButton.IsEnabled = true;
 
                 // Load image to bitmap
                 img = new Bitmap(dialog.FileName);
 
+                // Creating effects objects
+                gauss = new GaussianBlurEffect(ref img);
+                brightness = new BrightnessEffect(ref img);
+
+
                 // Setting display image
                 CachedImage.Source = new IPImage(img).BitmapToImageSource();
             }
-        }
-
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        {
-            GaussianBlurEffect gauss = new GaussianBlurEffect(img);
-            float sigma = (float)SigmaSlider.Value;
-            uint kernel = (uint)KernelSlider.Value;
-
-            gauss.CalculateKernel(kernel, sigma);
-            gauss.ApplyEffect();
-
-            // Updating displayed image
-            CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
 
         private void SaveMenuBtn_Click(object sender, RoutedEventArgs e)
@@ -83,9 +79,24 @@ namespace ImageProcessor
             Close();
         }
 
+        private void GaussianButton_Click(object sender, RoutedEventArgs e)
+        {
+            float sigma = (float)SigmaSlider.Value;
+            uint kernel = (uint)KernelSlider.Value;
+
+            gauss.CalculateKernel(kernel, sigma);
+            gauss.ApplyEffect();
+
+            // Updating displayed image
+            CachedImage.Source = new IPImage(img).BitmapToImageSource();
+        }
+
         private void BrigtnessButton_Click(object sender, RoutedEventArgs e)
         {
+            brightness.ApplyEffect((int)BrigtnessSlider.Value);
 
+            // Updating displayed image
+            CachedImage.Source = new IPImage(img).BitmapToImageSource();
         }
     }
 }

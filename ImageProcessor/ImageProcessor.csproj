@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\ImageProcessor.Brightness\Brightness.cs" />
     <Compile Include="src\ImageProcessor.GaussianBlur\GaussianBlur.cs" />
     <Compile Include="src\ImageProcessor.ImageUtil\IPImage.cs" />
     <Compile Include="src\ImageProcessor.Window\MainWindow.xaml.cs">

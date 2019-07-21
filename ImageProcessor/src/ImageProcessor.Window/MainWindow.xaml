@@ -57,7 +57,7 @@
                 <TextBox Text="{Binding ElementName=KernelSlider, Path=Value, UpdateSourceTrigger=Default}" TextAlignment="Right" Width="40" Margin="5" Background="White"/>
                 <Slider Name="KernelSlider" TickFrequency="2" IsSnapToTickEnabled="True" Minimum="3" Maximum="21" Margin="5"/>
             </DockPanel>
-            <Button Grid.Row="3" Content="Apply" Name="ApplyButton" Margin="6" IsEnabled="False"  Click="ApplyButton_Click"/>
+            <Button Grid.Row="3" Content="Apply" Name="GaussianButton" Margin="6" IsEnabled="False"  Click="GaussianButton_Click"/>
 
             <Label Grid.Row="4" Content="BRIGTHNESS" Foreground="White" FontSize="15" HorizontalAlignment="Right" Margin="5" FontWeight="Heavy"/>
             <Separator Grid.Row="4" VerticalAlignment="Bottom"/>
