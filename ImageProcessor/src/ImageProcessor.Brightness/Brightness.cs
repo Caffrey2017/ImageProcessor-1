@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,9 @@ namespace ImageProcessor.Brightness
             this.imgWidth = bitmap.Width;
         }
 
+        /// <summary>
+        /// METHOD IS DEPRECATED due to low performance, use ApplyEffectLockBits instead 
+        /// </summary>
         public void ApplyEffect(int brightness)
         {
             //if (brightness != 0)
@@ -53,5 +58,48 @@ namespace ImageProcessor.Brightness
                 }
             }
         }
+
+        /// <summary>
+        /// Applies BrigtnessEffect to image.
+        /// </summary>
+        /// <param name="brightness">Specify how much brigther or darker output image should be.</param>
+        public void ApplyEffectLockBits(int brightness)
+        {
+            // Locking bitmap
+            Rectangle rect = new Rectangle(0, 0, imgWidth, imgHeight);
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // Getting pointer to beginning of bitmap
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declating an array of bytes of bitmap
+            int bytes = Math.Abs(bmpData.Stride) * imgHeight;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copying data to array
+            Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            // Calculating pixels values
+            for (int i = 0; i < rgbValues.Length; i += 3)
+            {
+                int colR = rgbValues[i] + brightness;
+                int colG = rgbValues[i+1] + brightness;
+                int colB = rgbValues[i+2] + brightness;
+
+                if (colR < 0) colR = 0;
+                if (colG < 0) colG = 0;
+                if (colB < 0) colB = 0;
+
+                rgbValues[i] = (byte)Math.Min(255, colR);
+                rgbValues[i+1] = (byte)Math.Min(255, colG);
+                rgbValues[i+2] = (byte)Math.Min(255, colB);
+            }
+
+            // Copy RGB values back to bitmap
+            Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+            bitmap.UnlockBits(bmpData);
+        }
+
     }
 }

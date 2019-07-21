@@ -85,7 +85,7 @@ namespace ImageProcessor
             uint kernel = (uint)KernelSlider.Value;
 
             gauss.CalculateKernel(kernel, sigma);
-            gauss.ApplyEffect();
+            gauss.ApplyEffectLockBits();
 
             // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
@@ -93,7 +93,7 @@ namespace ImageProcessor
 
         private void BrigtnessButton_Click(object sender, RoutedEventArgs e)
         {
-            brightness.ApplyEffect((int)BrigtnessSlider.Value);
+            brightness.ApplyEffectLockBits((int)BrigtnessSlider.Value);
 
             // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -75,6 +77,46 @@ namespace ImageProcessor.GaussianBlur
             }
         }
 
+        public void ApplyEffectLockBits()
+        {
+            // Locking bitmap
+            Rectangle rect = new Rectangle(0, 0, imgWidth, imgHeight);
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // Getting pointer to beginning of bitmap
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declating an array of bytes of bitmap
+            int bytes = Math.Abs(bmpData.Stride) * imgHeight;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copying data to array
+            Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            byte[] rgbValuesOld = new byte[bytes];
+            Array.Copy(rgbValues, 0, rgbValuesOld, 0, bytes);
+
+            // Calculating pixels values
+            for (int i = 3 * ((int)kernelSize - 1) * imgWidth; i < rgbValues.Length - 3*(kernelSize - 1) * imgWidth; i += 3)
+            {
+                if (((i/3)%imgWidth < ((int)kernelSize - 1)) || ((i/3)%imgWidth >= imgWidth - ((int)kernelSize - 1)) )
+                {
+                    continue;
+                }
+                else
+                {
+                    rgbValues[i] = CalculatePixelLockBits(i, 0, rgbValuesOld);
+                    rgbValues[i+1] = CalculatePixelLockBits(i, 1, rgbValuesOld);
+                    rgbValues[i+2] = CalculatePixelLockBits(i, 2, rgbValuesOld);
+                }
+            }
+
+            // Copy RGB values back to bitmap
+            Marshal.Copy(rgbValues, 0, ptr, bytes);
+            bitmap.UnlockBits(bmpData);
+
+        }
+
         private int CalculatePixel(int x, int y, int color)
         {
             double sum = 0;
@@ -97,6 +139,30 @@ namespace ImageProcessor.GaussianBlur
                 }
             }
             return (int)sum;
+        }
+
+        private byte CalculatePixelLockBits(int pos, int color, byte[] rgbValues)
+        {
+            double sum = 0;
+            for (int i = 0; i < kernelSize; i++)
+            {
+                for (int j = 0; j < kernelSize; j++)
+                {
+                    switch (color)
+                    {
+                        case 0:
+                            sum += rgbValues[(((int)(pos/3)/imgWidth - (kernelSize - 1) + i)* imgWidth + ((int)(pos / 3) % imgWidth - (kernelSize - 1) + j))] * kernel[i, j];
+                            break;
+                        case 1:
+                            sum += rgbValues[(((int)(pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth +((int)(pos / 3) % imgWidth - (kernelSize - 1) + j)) + 1] * kernel[i, j];
+                            break;
+                        case 2:
+                            sum += rgbValues[(((int)(pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth + ((int)(pos / 3) % imgWidth - (kernelSize - 1) + j)) + 2] * kernel[i, j];
+                            break;
+                    }
+                }
+            }
+            return (byte)sum;
         }
 
     }
