@@ -150,13 +150,13 @@ namespace ImageProcessor.GaussianBlur
                     switch (color)
                     {
                         case 0:
-                            sum += rgbValues[(((int)(pos/3)/imgWidth - (kernelSize - 1) + i)* imgWidth + ((int)(pos / 3) % imgWidth - (kernelSize - 1) + j))] * kernel[i, j];
+                            sum += rgbValues[(((pos/3)/imgWidth - (kernelSize - 1) + i)* imgWidth * 3 + ((pos / 3) % imgWidth - (kernelSize - 1) + j) * 3)] * kernel[i, j];
                             break;
                         case 1:
-                            sum += rgbValues[(((int)(pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth +((int)(pos / 3) % imgWidth - (kernelSize - 1) + j)) + 1] * kernel[i, j];
+                            sum += rgbValues[(((pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth * 3 + ((pos / 3) % imgWidth - (kernelSize - 1) + j) * 3) + 1] * kernel[i, j];
                             break;
                         case 2:
-                            sum += rgbValues[(((int)(pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth + ((int)(pos / 3) % imgWidth - (kernelSize - 1) + j)) + 2] * kernel[i, j];
+                            sum += rgbValues[(((pos / 3) / imgWidth - (kernelSize - 1) + i) * imgWidth * 3 + ((pos / 3) % imgWidth - (kernelSize - 1) + j) * 3) + 2] * kernel[i, j];
                             break;
                     }
                 }
