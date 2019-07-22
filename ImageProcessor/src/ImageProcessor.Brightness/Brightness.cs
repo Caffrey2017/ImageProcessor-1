@@ -16,6 +16,8 @@ namespace ImageProcessor.Brightness
         private int imgWidth;
         private int imgHeight;
 
+        private const int id = 2;
+
         public double multiplier { get; private set; }
 
         public BrightnessEffect(ref Bitmap bitmap)
@@ -29,7 +31,7 @@ namespace ImageProcessor.Brightness
         /// <summary>
         /// METHOD IS DEPRECATED due to low performance, use ApplyEffectLockBits instead 
         /// </summary>
-        public void ApplyEffect(int brightness)
+        public void ApplyEffect(int brightness, int lastUsedEffect)
         {
             //if (brightness != 0)
             //    multiplier = 1 + (double)brightness / 100;
@@ -63,28 +65,35 @@ namespace ImageProcessor.Brightness
         /// Applies BrigtnessEffect to image.
         /// </summary>
         /// <param name="brightness">Specify how much brigther or darker output image should be.</param>
-        public void ApplyEffectLockBits(int brightness)
+        public void ApplyEffectLockBits(int brightness, int lastUsedEffect)
         {
+            Console.WriteLine(id);
+            if (lastUsedEffect != id && lastUsedEffect != 0)
+                bitmapOld = new Bitmap(bitmap);
+
             // Locking bitmap
             Rectangle rect = new Rectangle(0, 0, imgWidth, imgHeight);
-            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
+            BitmapData bmpDataOld = bitmapOld.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
             // Getting pointer to beginning of bitmap
             IntPtr ptr = bmpData.Scan0;
+            IntPtr ptrOld = bmpDataOld.Scan0;
 
             // Declating an array of bytes of bitmap
             int bytes = Math.Abs(bmpData.Stride) * imgHeight;
             byte[] rgbValues = new byte[bytes];
+            byte[] rgbValuesOld = new byte[bytes];
 
             // Copying data to array
             Marshal.Copy(ptr, rgbValues, 0, bytes);
+            Marshal.Copy(ptrOld, rgbValuesOld, 0, bytes);
 
             // Calculating pixels values
             for (int i = 0; i < rgbValues.Length; i += 3)
             {
-                int colR = rgbValues[i] + brightness;
-                int colG = rgbValues[i+1] + brightness;
-                int colB = rgbValues[i+2] + brightness;
+                int colR = rgbValuesOld[i] + brightness;
+                int colG = rgbValuesOld[i+1] + brightness;
+                int colB = rgbValuesOld[i+2] + brightness;
 
                 if (colR < 0) colR = 0;
                 if (colG < 0) colG = 0;
@@ -99,6 +108,7 @@ namespace ImageProcessor.Brightness
             Marshal.Copy(rgbValues, 0, ptr, bytes);
 
             bitmap.UnlockBits(bmpData);
+            bitmapOld.UnlockBits(bmpDataOld);
         }
 
     }

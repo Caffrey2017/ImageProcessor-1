@@ -30,9 +30,11 @@ namespace ImageProcessor
         private Bitmap img;
         private GaussianBlurEffect gauss;
         private BrightnessEffect brightness;
+        private int lastUsedEffect;
 
         public MainWindow()
         {
+            this.lastUsedEffect = 0;
             InitializeComponent();
         }
 
@@ -85,18 +87,22 @@ namespace ImageProcessor
             uint kernel = (uint)KernelSlider.Value;
 
             gauss.CalculateKernel(kernel, sigma);
-            gauss.ApplyEffectLockBits();
+            gauss.ApplyEffectLockBits(lastUsedEffect);
 
             // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
+
+            this.lastUsedEffect = 1;
         }
 
         private void BrigtnessButton_Click(object sender, RoutedEventArgs e)
         {
-            brightness.ApplyEffectLockBits((int)BrigtnessSlider.Value);
+            brightness.ApplyEffectLockBits((int)BrigtnessSlider.Value, lastUsedEffect);
 
             // Updating displayed image
             CachedImage.Source = new IPImage(img).BitmapToImageSource();
+
+            this.lastUsedEffect = 2;
         }
     }
 }

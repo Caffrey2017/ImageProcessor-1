@@ -16,6 +16,9 @@ namespace ImageProcessor.GaussianBlur
         private int imgWidth;
         private int imgHeight;
 
+        private const int id = 1;
+
+
         // Kernel stuff
         public double[,] kernel { get; private set; }
         public uint kernelSize { get; private set; }
@@ -24,9 +27,9 @@ namespace ImageProcessor.GaussianBlur
         public GaussianBlurEffect(ref Bitmap bitmap)
         {
             this.bitmap = bitmap;
-            bitmapOld = new Bitmap(bitmap);
-            imgWidth = bitmap.Width;
-            imgHeight = bitmap.Height;
+            this.bitmapOld = new Bitmap(bitmap);
+            this.imgWidth = bitmap.Width;
+            this.imgHeight = bitmap.Height;
 
             this.kernelSize = 3;
             this.sigma = 5.5f;
@@ -65,7 +68,7 @@ namespace ImageProcessor.GaussianBlur
             }
         }
 
-        public void ApplyEffect()
+        public void ApplyEffect(int lastUsedEffect)
         {
             for (int i = (int)kernelSize - 1; i < imgHeight - (kernelSize - 1); i++)
             {
@@ -77,24 +80,28 @@ namespace ImageProcessor.GaussianBlur
             }
         }
 
-        public void ApplyEffectLockBits()
+        public void ApplyEffectLockBits(int lastUsedEffect)
         {
+            if (lastUsedEffect != id && lastUsedEffect != 0)
+                bitmapOld = new Bitmap(bitmap);
+
             // Locking bitmap
             Rectangle rect = new Rectangle(0, 0, imgWidth, imgHeight);
-            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
+            BitmapData bmpDataOld = bitmapOld.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
             // Getting pointer to beginning of bitmap
             IntPtr ptr = bmpData.Scan0;
+            IntPtr ptrOld = bmpDataOld.Scan0;
 
             // Declating an array of bytes of bitmap
             int bytes = Math.Abs(bmpData.Stride) * imgHeight;
             byte[] rgbValues = new byte[bytes];
+            byte[] rgbValuesOld = new byte[bytes];
 
             // Copying data to array
             Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            byte[] rgbValuesOld = new byte[bytes];
-            Array.Copy(rgbValues, 0, rgbValuesOld, 0, bytes);
+            Marshal.Copy(ptrOld, rgbValuesOld, 0, bytes);
 
             // Calculating pixels values
             for (int i = 3 * ((int)kernelSize - 1) * imgWidth; i < rgbValues.Length - 3*(kernelSize - 1) * imgWidth; i += 3)
@@ -113,6 +120,7 @@ namespace ImageProcessor.GaussianBlur
             // Copy RGB values back to bitmap
             Marshal.Copy(rgbValues, 0, ptr, bytes);
             bitmap.UnlockBits(bmpData);
+            bitmapOld.UnlockBits(bmpDataOld);
 
         }
 
